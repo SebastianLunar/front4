@@ -6,7 +6,7 @@ const Sugeridos = ({ videos }) => {
     <div>
       Videos Sugeridos:
       {videos.map(video => (
-        <VideoCard key={video.id} video={video} />
+        <VideoCard key={video.Título} video={video} />
       ))}
     </div>
   )
