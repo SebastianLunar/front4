@@ -6,6 +6,8 @@ import Saludos from './components/Saludos'
 import Sugeridos from './components/Sugeridos'
 import Video from './components/Video'
 import { Box, Button, Container, Typography } from '@mui/material'
+import Characters from './components/Characters'
+import { useState } from 'react'
 
 function App () {
   // PARTE FUNCIONAL
@@ -77,9 +79,17 @@ function App () {
     color: '#fff'
   }
 
+  const [mostrar, setMostrar] = useState(false)
+
+  const mostrarComponente = () => {
+    setMostrar(!mostrar)
+  }
+
   // PARTE DEL HTML
   return (
     <>
+      {/* Primer Ejmplo de Container ---------------------------------------------------------------- */}
+
       {/* <Container
         style={{ height: '100vh' }}
         sx={{
@@ -108,7 +118,8 @@ function App () {
         Mi primer container
       </Container> */}
 
-      <NavBar />
+      {/* Ejemplo YouTube ---------------------------------------------------------------- */}
+      {/* <NavBar />
       <Box
         sx={{ display: { xs: 'block', sm: 'block', md: 'flex', lg: 'flex' } }}
       >
@@ -117,9 +128,15 @@ function App () {
           <MetaData />
         </Box>
         <Sugeridos videos={videos} />
-      </Box>
+      </Box> */}
 
       {/* <Saludos data={estudiantes} clase={clase}/> */}
+
+      {/* Página Rick y Morty ---------------------------------------------------------------- */}
+
+      <NavBar />
+      <Button onClick={mostrarComponente}>MOSTRAR</Button>
+      {mostrar && <Characters />}
     </>
   )
 }
