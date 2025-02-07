@@ -1,0 +1,30 @@
+{
+  "restaurants": [
+    {
+      "id": 1,
+      "name": "La Bella Rica",
+      "address": "Calle 123, 456, Barcelona",
+      "rating": 4.5,
+      "priceRange": "medium",
+      "cuisine": "Mexican",
+      "page": "1",
+      "menu": [
+        {
+          "id": 1,
+          "name": "Tacos de pavo",
+          "price": 6.99
+        },
+        {
+          "id": 2,
+          "name": "Burrito al pastor",
+          "price": 7.99
+        },
+        {
+          "id": 3,
+          "name": "Tacos de carne",
+          "price": 8.99
+        }
+      ]
+    }
+  ]
+}

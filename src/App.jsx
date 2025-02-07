@@ -1,26 +1,9 @@
-import styled from 'styled-components'
 import './App.css'
-import MetaData from './components/MetaData'
 import NavBar from './components/NavBar'
-import Saludos from './components/Saludos'
-import Sugeridos from './components/Sugeridos'
-import Video from './components/Video'
-import { Box, Button, Container, Typography } from '@mui/material'
 import Characters from './components/Characters'
-import { useState } from 'react'
 
 function App () {
   // PARTE FUNCIONAL
-  // const estudiantes = [
-  //   'Gloria',
-  //   'William',
-  //   'Laura'
-  // ]
-
-  // const clase = {
-  //   numero: 3,
-  //   tematica: 'Intro React'
-  // }
 
   const videos = [
     {
@@ -74,50 +57,9 @@ function App () {
     }
   ]
 
-  const containerStyles = {
-    border: '1px solid #000',
-    color: '#fff'
-  }
-
-  const [mostrar, setMostrar] = useState(false)
-
-  const mostrarComponente = () => {
-    setMostrar(!mostrar)
-  }
-
   // PARTE DEL HTML
   return (
-    <>
-      {/* Primer Ejmplo de Container ---------------------------------------------------------------- */}
-
-      {/* <Container
-        style={{ height: '100vh' }}
-        sx={{
-          backgroundColor: {
-            xs: 'yellow',
-            sm: '#ccc',
-            md: 'red',
-            lg: 'green',
-            xl: 'tomato'
-          }
-        }}
-      >
-        <Button
-          variant='contained'
-          sx={{
-            bgcolor: '#000',
-            py: 2,
-            ':hover': {
-              bgcolor: '#ff0000'
-            }
-          }}
-        >
-          EJEMPLO
-        </Button>
-        <Typography align='justify'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim dolorem quis sint. Earum corporis a repellendus obcaecati dolores dicta enim, fuga laudantium perspiciatis! Ex voluptas, delectus officiis soluta reiciendis repudiandae?</Typography>
-        Mi primer container
-      </Container> */}
-
+    <> 
       {/* Ejemplo YouTube ---------------------------------------------------------------- */}
       {/* <NavBar />
       <Box
@@ -135,8 +77,7 @@ function App () {
       {/* Página Rick y Morty ---------------------------------------------------------------- */}
 
       <NavBar />
-      <Button onClick={mostrarComponente}>MOSTRAR</Button>
-      {mostrar && <Characters />}
+      <Characters />
     </>
   )
 }
