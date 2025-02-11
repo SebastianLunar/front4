@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import CharacterCard from './CharacterCard'
 import {
   Box,
@@ -12,6 +12,7 @@ import {
   Stack,
   Typography
 } from '@mui/material'
+import { AppContext } from '../context/userContext'
 
 const Characters = () => {
   const [characters, setCharacters] = useState([])
@@ -19,7 +20,8 @@ const Characters = () => {
   const [totalPages, setTotalPages] = useState()
   const [characterStatus, setCharacterStatus] = useState('')
   const [characterSpecies, setCharacterSpecies] = useState('')
-
+  const { context, setContext } = useContext(AppContext)
+  console.log(context)
   const handlePageChange = (event, value) => {
     setPage(value)
   }
@@ -98,6 +100,9 @@ const Characters = () => {
         </Stack>
       </Box>
       <Box width='80%'>
+        <Typography variant='h4' align='left'>
+          Bienvenido, usuario: {context.nombre}
+        </Typography>
         <Stack
           spacing={2}
           alignItems='center'

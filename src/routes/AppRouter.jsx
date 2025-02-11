@@ -1,29 +1,50 @@
-import React, { lazy, Suspense } from 'react'
+import React, { lazy, Suspense, useState } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router'
 import NavBar from '../components/NavBar'
+import { AppContext } from '../context/userContext'
+import Private from './Private'
+import Available from './Available'
 
 const Home = lazy(() => import('../components/Home'))
-const Characters = lazy(() => import('../components/Characters'))
-const CharacterDetail = lazy(() => import('../components/CharacterDetail'))
-const Locations = lazy(() => import('../components/Locations'))
-const Episodes = lazy(() => import('../components/Episodes'))
-const LocationDetail = lazy(() => import('../components/LocationDetail'))
+const SignUp = lazy(() => import('../components/SignUp'))
+const LogIn = lazy(() => import('../components/LogIn'))
 
 const AppRouter = () => {
+  const [autenticado, setAutenticado] = useState(false)
+  const [context, setContext] = useState({})
+
   return (
-    <BrowserRouter>
-      <NavBar />
-      <Suspense fallback={<div>Loading...</div>}>
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/characters' element={<Characters />} />
-          <Route path='/characters/:charID' element={<CharacterDetail />} />
-          <Route path='/locations' element={<Locations />} />
-          <Route path='/locations/:locationID' element={<LocationDetail />} />
-          <Route path='/episodes' element={<Episodes />} />
-        </Routes>
-      </Suspense>
-    </BrowserRouter>
+    <AppContext.Provider
+      value={{
+        context,
+        setContext
+      }}
+    >
+      <BrowserRouter>
+        <NavBar autenticado={autenticado} setAutenticado={setAutenticado} />
+        <Suspense fallback={<div>Loading...</div>}>
+          <Routes>
+            {/* Rutas Públicas */}
+            <Route path='/' element={<Home />} />
+            <Route path='/signup' element={<SignUp />} />
+            <Route
+              path='/login'
+              element={<LogIn setAutenticado={setAutenticado} />}
+            />
+
+            {/* Rutas Privadas */}
+            <Route
+              path='/*'
+              element={
+                <Private autenticado={autenticado}>
+                  <Available />
+                </Private>
+              }
+            />
+          </Routes>
+        </Suspense>
+      </BrowserRouter>
+    </AppContext.Provider>
   )
 }
 

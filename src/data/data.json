@@ -1,0 +1,22 @@
+{
+  "usuarios": [
+    {
+      "id": "01c19046-5ae0-4596-bd04-e63512e77823",
+      "nombre": "Daniela Palacio",
+      "email": "daniCarbon2@gmail.com",
+      "password": "geek123"
+    },
+    {
+      "id": "ef71e368-f6e9-44ab-bfea-e43246a90048",
+      "nombre": "William R",
+      "email": "williwilli@gmail.com",
+      "password": "geeker"
+    },
+    {
+      "id": "c3768e45-e06f-485d-92af-1f97b6581baf",
+      "nombre": "Laura",
+      "email": "lauEstrellita@gmail.com",
+      "password": "estrella"
+    }
+  ]
+}

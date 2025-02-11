@@ -24,54 +24,68 @@ import Button from '@mui/material/Button'
 import { NavLink } from 'react-router-dom'
 
 const drawerWidth = 240
-const navItems = [
-  {
-    id: 1,
-    name: 'Personajes',
-    path: '/characters'
-  },
-  {
-    id: 2,
-    name: 'Ubicaciones',
-    path: '/locations'
-  },
-  {
-    id: 3,
-    name: 'Episodios',
-    path: '/episodes'
-  }
-]
 
-const NavBar = props => {
-  const { window } = props
+const NavBar = ({ autenticado, setAutenticado }) => {
   const [mobileOpen, setMobileOpen] = React.useState(false)
 
   const handleDrawerToggle = () => {
     setMobileOpen(prevState => !prevState)
   }
 
+  const navItems = [
+    {
+      id: 1,
+      name: 'Personajes',
+      path: '/characters',
+      show: autenticado
+    },
+    {
+      id: 2,
+      name: 'Ubicaciones',
+      path: '/locations',
+      show: autenticado
+    },
+    {
+      id: 3,
+      name: 'Episodios',
+      path: '/episodes',
+      show: autenticado
+    },
+    {
+      id: 4,
+      name: 'Ingresar',
+      path: '/login',
+      show: true
+    },
+    {
+      id: 5,
+      name: 'Registrarse',
+      path: '/signup',
+      show: true
+    }
+  ]
+
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
       <Typography variant='h6' sx={{ my: 2 }}>
-        MUI
+        Rick & Morty Pedia
       </Typography>
       <Divider />
       <List>
-        {navItems.map(item => (
-          <NavLink to={item.path}>
-            <ListItem key={item.id} disablePadding>
-              <ListItemButton sx={{ textAlign: 'center' }}>
-                <ListItemText primary={item.name} />
-              </ListItemButton>
-            </ListItem>
-          </NavLink>
-        ))}
+        {navItems
+          .filter(ruta => ruta.show)
+          .map(item => (
+            <NavLink to={item.path} key={item.id}>
+              <ListItem key={item.id} disablePadding>
+                <ListItemButton sx={{ textAlign: 'center' }}>
+                  <ListItemText primary={item.name} />
+                </ListItemButton>
+              </ListItem>
+            </NavLink>
+          ))}
       </List>
     </Box>
   )
-
-  const container =
-    window !== undefined ? () => window().document.body : undefined
 
   return (
     <Box sx={{ display: 'flex', mb: 8 }}>
@@ -92,24 +106,25 @@ const NavBar = props => {
             component='div'
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
-            MUI
+            Rick & Morty Pedia
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-            {navItems.map(item => (
-              // <a href={item} />
-              // <Link to={item} />
-              <NavLink to={item.path}>
-                <Button key={item.id} sx={{ color: '#fff' }}>
-                  {item.name}
-                </Button>
-              </NavLink>
-            ))}
+            {navItems
+              .filter(ruta => ruta.show)
+              .map(item => (
+                // <a href={item} />
+                // <Link to={item} />
+                <NavLink to={item.path} key={item.id}>
+                  <Button key={item.id} sx={{ color: '#fff' }}>
+                    {item.name}
+                  </Button>
+                </NavLink>
+              ))}
           </Box>
         </Toolbar>
       </AppBar>
       <nav>
         <Drawer
-          container={container}
           variant='temporary'
           open={mobileOpen}
           onClose={handleDrawerToggle}
