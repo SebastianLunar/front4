@@ -4,6 +4,7 @@ import {
   Container,
   FilledInput,
   FormControl,
+  FormLabel,
   IconButton,
   InputAdornment,
   InputLabel,
@@ -12,12 +13,15 @@ import {
 import React, { useState } from 'react'
 import { postData } from '../helpers/postData'
 import { useNavigate } from 'react-router-dom'
+import { MuiFileInput } from 'mui-file-input'
+import { getImageURL } from '../helpers/mediaUpload'
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [nombre, setNombre] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [file, setFile] = useState(null)
   const navigate = useNavigate()
 
   const handleClickShowPassword = () => setShowPassword(show => !show)
@@ -29,16 +33,21 @@ const SignUp = () => {
     event.preventDefault()
   }
 
+  const handleFileUpload = async file => {
+    // setFile(event.target.files[0])    <---- Forma tradicional de controlar el evento de un input de archivo
+  }
+
   const handleSubmit = async event => {
     event.preventDefault()
     const newUser = {
       id: crypto.randomUUID(),
       nombre,
       email,
+      profilePhoto: await getImageURL(file),
       password
     }
 
-    const result = await postData('http://localhost:3000/usuarios', newUser)
+    const result = await postData('https://apideployer.onrender.com/usuarios', newUser)
     if (result === 201) {
       alert('Usuario creado exitosamente')
       navigate('/login')
@@ -104,6 +113,16 @@ const SignUp = () => {
                 </IconButton>
               </InputAdornment>
             }
+          />
+        </FormControl>
+        <FormControl sx={{ m: 1, width: '25ch' }} variant='filled'>
+          <FormLabel htmlFor='file'>Foto de perfil</FormLabel>
+          <MuiFileInput
+            type='file'
+            value={file}
+            onChange={file => setFile(file)}
+            placeholder='Subir archivo'
+            style={{ cursor: 'pointer' }}
           />
         </FormControl>
         <Button type='submit' variant='contained'>

@@ -17,6 +17,20 @@
       "nombre": "Laura",
       "email": "lauEstrellita@gmail.com",
       "password": "estrella"
+    },
+    {
+      "id": "2fbcc789-443a-4ea9-aaf3-097fdc1315b9",
+      "nombre": "Luisa Fernanda",
+      "email": "luisaCoal@gmail.com",
+      "profilePhoto": "https://res.cloudinary.com/dd5yolnde/image/upload/v1739457546/foodDelivery/jcv1eiewcrgxtokcw93w.webp",
+      "password": "geek123"
+    },
+    {
+      "id": "db0a3e0d-edea-4a68-9052-dc6f8b996f2f",
+      "nombre": "Angela",
+      "email": "angelaCrowned@gmail.com",
+      "profilePhoto": "https://res.cloudinary.com/dd5yolnde/image/upload/v1739457760/foodDelivery/euqvkltxyrze0lx0lgus.jpg",
+      "password": "geeker"
     }
   ]
 }

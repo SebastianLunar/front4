@@ -49,7 +49,7 @@ const LogIn = ({ setAutenticado }) => {
 
   useEffect(() => {
     const getUsers = async () => {
-      const users = await getData('http://localhost:3000/usuarios')
+      const users = await getData('https://apideployer.onrender.com/usuarios')
       setUsuarios(users)
     }
 
