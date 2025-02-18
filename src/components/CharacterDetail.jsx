@@ -1,10 +1,65 @@
-import { Box, Paper, Typography } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import { Box, Button, Paper, Stack, Typography } from '@mui/material'
+import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { AppContext } from '../context/userContext'
+import { patchData } from '../helpers/patchData'
+import { getData } from '../helpers/getData'
 
 const CharacterDetail = () => {
   const { charID } = useParams()
   const [character, setCharacter] = useState({})
+  const [buttonText, setButtonText] = useState('Añadir a Favoritos')
+  const { context, setContext } = useContext(AppContext)
+  const currentFavorites = context.favoritos || []
+
+  const handleFavorite = async () => {
+    const personajeEsta = currentFavorites.find(
+      element => element.id === character.id
+    )
+
+    if (personajeEsta) {
+      const nuevosFavorites = currentFavorites.filter(element => element.id !== character.id)
+      
+      const newFavorites = {
+        favoritos: [...nuevosFavorites]
+      }
+
+      const response = await patchData(
+        'https://apideployer.onrender.com/usuarios',
+        context.id,
+        newFavorites
+      )
+      if (response === 200) {
+        alert('Elimando de favoritos')
+        const responseGet = await getData(
+          `https://apideployer.onrender.com/usuarios/${context.id}`
+        )
+        setContext(responseGet)
+      } else {
+        console.error('Error al eliminar de favoritos')
+      }
+    } else {
+      const newFavorites = {
+        favoritos: [...currentFavorites]
+      }
+      newFavorites.favoritos.push(character)
+
+      const response = await patchData(
+        'https://apideployer.onrender.com/usuarios',
+        context.id,
+        newFavorites
+      )
+      if (response === 200) {
+        alert('Agregado a favoritos')
+        const responseGet = await getData(
+          `https://apideployer.onrender.com/usuarios/${context.id}`
+        )
+        setContext(responseGet)
+      } else {
+        console.error('Error al agregar a favoritos')
+      }
+    }
+  }
 
   useEffect(() => {
     fetch(`https://rickandmortyapi.com/api/character/${charID}`)
@@ -12,7 +67,14 @@ const CharacterDetail = () => {
       .then(data => setCharacter(data))
   }, [])
 
-  console.log(character)
+  useEffect(() => {
+    const personajeEsta = currentFavorites.find(
+      element => element.id === character.id
+    )
+    setButtonText(
+      personajeEsta ? 'Eliminar de Favoritos' : 'Añadir a Favoritos'
+    )
+  }, [character, currentFavorites])
 
   return (
     <Paper
@@ -22,7 +84,12 @@ const CharacterDetail = () => {
         borderRadius: '0.5rem',
         marginTop: '4rem',
         padding: '2rem',
-        textAlign: 'center'
+        textAlign: 'center',
+        width: 'min-content',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        margin: '0 auto'
       }}
     >
       <img
@@ -51,6 +118,11 @@ const CharacterDetail = () => {
         <Typography variant='h6'>Primera aparición</Typography>
         <span>PENDIENTE</span>
       </Box>
+      <Stack>
+        <Button variant='contained' color='secondary' onClick={handleFavorite}>
+          {buttonText}
+        </Button>
+      </Stack>
     </Paper>
   )
 }
