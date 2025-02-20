@@ -15,6 +15,7 @@ import { postData } from '../helpers/postData'
 import { useNavigate } from 'react-router-dom'
 import { MuiFileInput } from 'mui-file-input'
 import { getImageURL } from '../helpers/mediaUpload'
+import useForm from '../hooks/useForm'
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false)
@@ -38,29 +39,44 @@ const SignUp = () => {
     // setFile(event.target.files[0])    <---- Forma tradicional de controlar el evento de un input de archivo
   }
 
+  const { formValues, handleInputChange } = useForm({
+    nombre: '',
+    email: '',
+    password: ''
+  })
+
+  // Llaves {} Objetos
+  // Corchetes [] Arreglos
+
   const handleSubmit = async event => {
     event.preventDefault()
-    setIsSending(true)
-    const newUser = {
-      id: crypto.randomUUID(),
-      nombre,
-      email,
-      profilePhoto: await getImageURL(file),
-      password
-    }
+    console.log(formValues)
+    // setIsSending(true)
+    // const newUser = {
+    //   id: crypto.randomUUID(),
+    //   nombre,
+    //   email,
+    //   profilePhoto: await getImageURL(file),
+    //   password
+    // }
 
-    if (nombre !== '' && email !== '' && password !== '') {
-      const result = await postData(
-        'https://apideployer.onrender.com/usuarios',
-        newUser
-      )
-      if (result === 201) {
-        alert('Usuario creado exitosamente')
-        navigate('/login')
-      } else {
-        alert('Hubo un error al crear el usuario')
-      }
-    }
+    // if (nombre !== '' && email !== '' && password !== '') {
+    //   const result = await postData(
+    //     'https://apideployer.onrender.com/usuarios',
+    //     newUser
+    //   )
+    //   if (result === 201) {
+    //     alert('Usuario creado exitosamente')
+    //     navigate('/login')
+    //   } else {
+    //     alert('Hubo un error al crear el usuario')
+    //   }
+    // }
+  }
+
+  const handleChange = event => {
+    const newName = event.target.value
+    setName(newName)
   }
 
   return (
@@ -79,36 +95,33 @@ const SignUp = () => {
         <FormControl sx={{ m: 1, width: '25ch' }} variant='filled'>
           <TextField
             label='Nombre'
+            name='nombre'
             id='nombre'
             error={isSending && nombre === ''}
-            value={nombre}
-            onChange={event => {
-              setNombre(event.target.value)
-            }}
+            value={formValues.nombre}
+            onChange={handleInputChange}
             helperText={isSending && nombre === '' && 'Debe llenar este campo'}
           />
         </FormControl>
         <FormControl sx={{ m: 1, width: '25ch' }} variant='filled'>
           <TextField
             label='Email'
+            name='email'
             type='email'
             id='email'
             required
-            value={email}
-            onChange={event => {
-              setEmail(event.target.value)
-            }}
+            value={formValues.email}
+            onChange={handleInputChange}
           />
         </FormControl>
         <FormControl sx={{ m: 1, width: '25ch' }} variant='filled'>
-          <InputLabel htmlFor='filled-adornment-password'>Password</InputLabel>
+          <InputLabel htmlFor='password'>Password</InputLabel>
           <FilledInput
-            id='filled-adornment-password'
+            id='password'
+            name='password'
             type={showPassword ? 'text' : 'password'}
-            value={password}
-            onChange={event => {
-              setPassword(event.target.value)
-            }}
+            value={formValues.password}
+            onChange={handleInputChange}
             endAdornment={
               <InputAdornment position='end'>
                 <IconButton

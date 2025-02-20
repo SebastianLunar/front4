@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
 // const Barra = styled.nav`
 //   width: 100%;
@@ -21,15 +21,26 @@ import MenuIcon from '@mui/icons-material/Menu'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
+import { Avatar, Menu, MenuItem, Tooltip } from '@mui/material'
+import { AppContext } from '../context/userContext'
 
 const drawerWidth = 240
 
 const NavBar = ({ autenticado, setAutenticado }) => {
-  const [mobileOpen, setMobileOpen] = React.useState(false)
+  const { context, setContext } = useContext(AppContext)
+  const navigate = useNavigate()
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const [anchorElUser, setAnchorElUser] = useState(null)
 
   const handleDrawerToggle = () => {
     setMobileOpen(prevState => !prevState)
+  }
+  const handleOpenUserMenu = event => {
+    setAnchorElUser(event.currentTarget)
+  }
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null)
   }
 
   const navItems = [
@@ -55,15 +66,27 @@ const NavBar = ({ autenticado, setAutenticado }) => {
       id: 4,
       name: 'Ingresar',
       path: '/login',
-      show: true
+      show: !autenticado
     },
     {
       id: 5,
       name: 'Registrarse',
       path: '/signup',
-      show: true
+      show: !autenticado
     }
   ]
+
+  const showProfile = () => {
+    handleCloseUserMenu()
+    navigate('/profile')
+  }
+
+  const logOut = () => {
+    handleCloseUserMenu()
+    setContext({})
+    localStorage.removeItem('user')
+    setAutenticado(false)
+  } 
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
@@ -121,6 +144,42 @@ const NavBar = ({ autenticado, setAutenticado }) => {
                 </NavLink>
               ))}
           </Box>
+          {autenticado && (
+            <Box sx={{ flexGrow: 0 }}>
+              <Tooltip title='Abrir Configuración'>
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt='Imagen del Usuario' src={context.profilePhoto} />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: '45px' }}
+                id='menu-appbar'
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right'
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right'
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                <MenuItem key={1} onClick={showProfile}>
+                  <Typography sx={{ textAlign: 'center' }}>
+                    Mi Perfil
+                  </Typography>
+                </MenuItem>
+                <MenuItem key={2} onClick={logOut}>
+                  <Typography sx={{ textAlign: 'center' }}>
+                    Cerrar Sesión
+                  </Typography>
+                </MenuItem>
+              </Menu>
+            </Box>
+          )}
         </Toolbar>
       </AppBar>
       <nav>

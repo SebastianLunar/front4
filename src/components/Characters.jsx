@@ -87,13 +87,14 @@ const Characters = () => {
         <Stack
           direction='row'
           useFlexGap
-          sx={{ flexWrap: 'wrap', cursor: 'pointer' }}
+          sx={{ flexWrap: 'wrap' }}
           spacing={1}
         >
           {species.map(element => (
             <Chip
               label={element}
               variant={characterSpecies === element ? 'filled' : 'outlined'}
+              sx={{ cursor: 'pointer' }}
               onClick={() => setCharacterSpecies(element)}
             />
           ))}

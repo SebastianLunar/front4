@@ -40,6 +40,7 @@ const LogIn = ({ setAutenticado }) => {
         alert('Bienvenido')
         setAutenticado(true)
         setContext(user)
+        localStorage.setItem('user', JSON.stringify(user))
         navigate('/characters')
       } else {
         alert('Contraseña incorrecta')
