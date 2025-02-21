@@ -13,6 +13,8 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getData } from '../helpers/getData'
 import { AppContext } from '../context/userContext'
+import { ErrorMessage, Field, Form, Formik } from 'formik'
+import * as Yup from 'yup'
 
 const LogIn = ({ setAutenticado }) => {
   const [showPassword, setShowPassword] = useState(false)
@@ -66,6 +68,33 @@ const LogIn = ({ setAutenticado }) => {
         alignItems: 'center'
       }}
     >
+      <Formik
+        initialValues={{
+          email: 'angela@gmail.com',
+          password: ''
+        }}
+        onSubmit={values => {
+          console.log(values)
+        }}
+        validationSchema={Yup.object({
+          email: Yup.string()
+            .email('Debes ingresar un email válido')
+            .required('El email es obligatorio'),
+          password: Yup.string()
+            .min(8, 'La contraseña debe tener al menos 8 caracteres')
+            .max(20, 'La contraseña debe tener máximo 20 caractes')
+            .required('La contraseña es obligatoria')
+        })}
+      >
+        <Form style={{ display: 'flex', flexDirection: 'column' }}>
+          <Field className='inputForm' type='email' name='email' />
+          <ErrorMessage name="email" />
+          <Field className='inputForm' type='password' name='password' />
+          <ErrorMessage name="password" />
+          <Button type='submit'>Iniciar Sesión</Button>
+        </Form>
+      </Formik>
+
       <form
         style={{ display: 'flex', flexDirection: 'column' }}
         onSubmit={handleSubmit}

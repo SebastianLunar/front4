@@ -1,7 +1,14 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState
+} from 'react'
 import CharacterCard from './CharacterCard'
 import {
   Box,
+  Button,
   Chip,
   Divider,
   FormControl,
@@ -21,9 +28,27 @@ const Characters = () => {
   const [characterStatus, setCharacterStatus] = useState('')
   const [characterSpecies, setCharacterSpecies] = useState('')
   const { context, setContext } = useContext(AppContext)
+  const [count, setCount] = useState(0)
   console.log(context)
   const handlePageChange = (event, value) => {
     setPage(value)
+  }
+
+  // Memorizo el valor de los personajes (guardo el array en caché)
+  const shownCharacters = useMemo(() => characters, [characters])
+
+  // Memorizo la función que renderiza las Cards
+  const memoCards = useCallback(() => {
+    return shownCharacters.map(character => (
+      <CharacterCard key={character.id} character={character} />
+    ))
+  }, [shownCharacters])
+
+  const handleUpdate = () => {
+    setCount(count + 1)
+  }
+  const handleSpeciesChange = event => {
+    setCharacterSpecies(event.target.value)
   }
 
   const handleStatusChange = event => {
@@ -84,12 +109,7 @@ const Characters = () => {
         </FormControl>
         <Divider></Divider>
         <Typography variant='h5'>Especie</Typography>
-        <Stack
-          direction='row'
-          useFlexGap
-          sx={{ flexWrap: 'wrap' }}
-          spacing={1}
-        >
+        <Stack direction='row' useFlexGap sx={{ flexWrap: 'wrap' }} spacing={1}>
           {species.map(element => (
             <Chip
               label={element}
@@ -104,6 +124,9 @@ const Characters = () => {
         <Typography variant='h4' align='left'>
           Bienvenido, usuario: {context.nombre}
         </Typography>
+        <Button variant='contained' onClick={handleUpdate}>
+          ACTUALIZAR {count}
+        </Button>
         <Stack
           spacing={2}
           alignItems='center'
@@ -119,9 +142,7 @@ const Characters = () => {
           />
         </Stack>
         <Box display='flex' flexWrap='wrap' justifyContent='center'>
-          {characters.map(character => (
-            <CharacterCard key={character.id} character={character} />
-          ))}
+          {memoCards()}
         </Box>
       </Box>
     </Box>

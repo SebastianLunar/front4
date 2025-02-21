@@ -19,9 +19,6 @@ import useForm from '../hooks/useForm'
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false)
-  const [nombre, setNombre] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
   const [file, setFile] = useState(null)
   const [isSending, setIsSending] = useState(false)
   const navigate = useNavigate()
@@ -50,28 +47,28 @@ const SignUp = () => {
 
   const handleSubmit = async event => {
     event.preventDefault()
-    console.log(formValues)
-    // setIsSending(true)
-    // const newUser = {
-    //   id: crypto.randomUUID(),
-    //   nombre,
-    //   email,
-    //   profilePhoto: await getImageURL(file),
-    //   password
-    // }
+    // console.log(formValues)
+    setIsSending(true)
+    const newUser = {
+      id: crypto.randomUUID(),
+      nombre: formValues.nombre,
+      email: formValues.email,
+      profilePhoto: await getImageURL(file),
+      password: formValues.password
+    }
 
-    // if (nombre !== '' && email !== '' && password !== '') {
-    //   const result = await postData(
-    //     'https://apideployer.onrender.com/usuarios',
-    //     newUser
-    //   )
-    //   if (result === 201) {
-    //     alert('Usuario creado exitosamente')
-    //     navigate('/login')
-    //   } else {
-    //     alert('Hubo un error al crear el usuario')
-    //   }
-    // }
+    if (formValues.nombre !== '' && formValues.email !== '' && formValues.password !== '') {
+      const result = await postData(
+        'https://apideployer.onrender.com/usuarios',
+        newUser
+      )
+      if (result === 201) {
+        alert('Usuario creado exitosamente')
+        navigate('/login')
+      } else {
+        alert('Hubo un error al crear el usuario')
+      }
+    }
   }
 
   const handleChange = event => {
@@ -97,10 +94,10 @@ const SignUp = () => {
             label='Nombre'
             name='nombre'
             id='nombre'
-            error={isSending && nombre === ''}
+            error={isSending && formValues.nombre === ''}
             value={formValues.nombre}
             onChange={handleInputChange}
-            helperText={isSending && nombre === '' && 'Debe llenar este campo'}
+            helperText={isSending && formValues.nombre === '' && 'Debe llenar este campo'}
           />
         </FormControl>
         <FormControl sx={{ m: 1, width: '25ch' }} variant='filled'>
