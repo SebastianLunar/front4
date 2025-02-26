@@ -1,7 +1,21 @@
 import { Button, Container, Typography } from '@mui/material'
-import React from 'react'
+import React, { useEffect } from 'react'
+import { getData } from '../helpers/getData'
+import { useDispatch } from 'react-redux'
+import { getUsers } from '../redux/slices/usersSlice'
 
 const Home = () => {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    const getUsersEffect = async () => {
+      const users = await getData('https://apideployer.onrender.com/usuarios')
+      dispatch(getUsers(users))
+    }
+
+    getUsersEffect()
+  }, [])
+
   return (
     <Container
       style={{ height: '100vh' }}

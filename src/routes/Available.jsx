@@ -7,7 +7,7 @@ const Episodes = lazy(() => import('../components/Episodes'))
 const LocationDetail = lazy(() => import('../components/LocationDetail'))
 const Profile = lazy(() => import('../components/Profile'))
 
-const Available = () => {
+const Available = ({ setAutenticado }) => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <Routes>
@@ -16,7 +16,7 @@ const Available = () => {
         <Route path='/locations' element={<Locations />} />
         <Route path='/locations/:locationID' element={<LocationDetail />} />
         <Route path='/episodes' element={<Episodes />} />
-        <Route path='/profile' element={<Profile />} />
+        <Route path='/profile' element={<Profile setAutenticado={setAutenticado} />} />
       </Routes>
     </Suspense>
   )
