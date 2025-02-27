@@ -24,11 +24,13 @@ import Button from '@mui/material/Button'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { Avatar, Menu, MenuItem, Tooltip } from '@mui/material'
 import { AppContext } from '../context/userContext'
+import { useSelector } from 'react-redux'
 
 const drawerWidth = 240
 
 const NavBar = ({ autenticado, setAutenticado }) => {
   const { context, setContext } = useContext(AppContext)
+  const currentUser = useSelector(store => store.currentUser)
   const navigate = useNavigate()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [anchorElUser, setAnchorElUser] = useState(null)
@@ -148,7 +150,7 @@ const NavBar = ({ autenticado, setAutenticado }) => {
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title='Abrir Configuración'>
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt='Imagen del Usuario' src={context.profilePhoto} />
+                  <Avatar alt='Imagen del Usuario' src={context.profilePhoto || currentUser.photoURL} />
                 </IconButton>
               </Tooltip>
               <Menu

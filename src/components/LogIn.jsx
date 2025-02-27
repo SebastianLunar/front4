@@ -2,6 +2,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material'
 import {
   Box,
   Button,
+  ButtonGroup,
   Container,
   FilledInput,
   FormControl,
@@ -16,25 +17,35 @@ import { getData } from '../helpers/getData'
 import { AppContext } from '../context/userContext'
 import { ErrorMessage, Field, Form, Formik } from 'formik'
 import * as Yup from 'yup'
-import { useSelector } from 'react-redux'
+import GoogleIcon from '@mui/icons-material/Google'
+import FacebookIcon from '@mui/icons-material/Facebook'
+import { useDispatch, useSelector } from 'react-redux'
 import UserCard from './UserCard'
+import {
+  facebookLogin,
+  googleLogin,
+  saveUser
+} from '../redux/slices/currentUser'
 
 const LogIn = ({ setAutenticado }) => {
+  const dispatch = useDispatch()
   const { registeredUsers } = useSelector(store => store.users)
   const [selectedUser, setSelectedUser] = useState(null)
-  const [showPassword, setShowPassword] = useState(false)
-  const [usuarios, setUsuarios] = useState([])
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
 
-  // useEffect(() => {
-  //   const getUsers = async () => {
-  //     const users = await getData('https://apideployer.onrender.com/usuarios')
-  //     setUsuarios(users)
-  //   }
+  const handleGoogleLogin = async () => {
+    await googleLogin().then(response => {
+      dispatch(saveUser(response))
+      setAutenticado(true)
+    })
+  }
 
-  //   getUsers()
-  // }, [])
+  const handleFacebookLogin = async () => {
+    await facebookLogin().then(response => {
+      console.log(response)
+      dispatch(saveUser(response))
+      setAutenticado(true)
+    })
+  }
 
   return (
     <Container
@@ -46,6 +57,36 @@ const LogIn = ({ setAutenticado }) => {
         flexDirection: 'column'
       }}
     >
+      <Box
+        sx={{
+          display: 'flex',
+          '& > *': {
+            m: 1
+          }
+        }}
+      >
+        <ButtonGroup
+          orientation='vertical'
+          aria-label='Vertical button group'
+          variant='contained'
+        >
+          <Button
+            key='one'
+            color='success'
+            startIcon={<GoogleIcon />}
+            onClick={handleGoogleLogin}
+          >
+            Ingresar con Google
+          </Button>
+          <Button
+            key='two'
+            startIcon={<FacebookIcon />}
+            onClick={handleFacebookLogin}
+          >
+            Ingresar con Facebook
+          </Button>
+        </ButtonGroup>
+      </Box>
       <Box gap='1rem' display='flex' flexWrap='wrap' justifyContent='center'>
         {registeredUsers.map(user => (
           <UserCard

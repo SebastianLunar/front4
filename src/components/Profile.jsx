@@ -2,13 +2,11 @@ import React, { useContext, useState } from 'react'
 import { AppContext } from '../context/userContext'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import {
-  Avatar,
   Box,
   Button,
   Container,
   FilledInput,
   FormControl,
-  FormLabel,
   IconButton,
   InputAdornment,
   InputLabel,
@@ -20,10 +18,13 @@ import { MuiFileInput } from 'mui-file-input'
 import { getImageURL } from '../helpers/mediaUpload'
 import useForm from '../hooks/useForm'
 import { deleteData } from '../helpers/deleteData'
+import { useSelector } from 'react-redux'
 
 const Profile = ({ setAutenticado }) => {
-  const { context, setContext } = useContext(AppContext)
-  console.log(context)
+  const { context } = useContext(AppContext)
+  const currentUser = useSelector(store => store.currentUser)
+  // const user = currentUser.uid === undefined ? context : currentUser
+
   const [showPassword, setShowPassword] = useState(false)
   const [file, setFile] = useState(null)
   const [isSending, setIsSending] = useState(false)
@@ -43,8 +44,8 @@ const Profile = ({ setAutenticado }) => {
   }
 
   const { formValues, handleInputChange } = useForm({
-    nombre: context.nombre,
-    email: context.email,
+    nombre: context.nombre || currentUser.displayName,
+    email: context.email || currentUser.email,
     password: ''
   })
 
@@ -82,7 +83,10 @@ const Profile = ({ setAutenticado }) => {
   }
 
   const deleteAccount = async () => {
-    const statusCode = await deleteData('https://apideployer.onrender.com/usuarios', context.id)
+    const statusCode = await deleteData(
+      'https://apideployer.onrender.com/usuarios',
+      context.id
+    )
     if (statusCode === 200) {
       alert('Cuenta eliminada. Te vamos a extrañar :(')
       setAutenticado(false)
@@ -110,7 +114,7 @@ const Profile = ({ setAutenticado }) => {
       <Box>
         <img
           style={{ borderRadius: '100%', width: '300px', height: '300px' }}
-          src={context.profilePhoto}
+          src={context.profilePhoto || currentUser.photoURL}
         />
       </Box>
       <MuiFileInput
