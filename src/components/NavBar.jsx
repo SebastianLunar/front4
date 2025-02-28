@@ -66,12 +66,18 @@ const NavBar = ({ autenticado, setAutenticado }) => {
     },
     {
       id: 4,
+      name: 'Peliculas',
+      path: '/movies',
+      show: autenticado
+    },
+    {
+      id: 5,
       name: 'Ingresar',
       path: '/login',
       show: !autenticado
     },
     {
-      id: 5,
+      id: 6,
       name: 'Registrarse',
       path: '/signup',
       show: !autenticado
