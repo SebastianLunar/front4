@@ -1,5 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { FacebookAuthProvider, signInWithPopup } from 'firebase/auth'
+import {
+  createUserWithEmailAndPassword,
+  FacebookAuthProvider,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+  updateProfile
+} from 'firebase/auth'
 import {
   auth,
   facebookProvider,
@@ -70,5 +77,50 @@ export const facebookLogin = async () => {
     }
   } catch (error) {
     console.error('Error con FacebookLogin: ' + error)
+  }
+}
+
+export const emailRegister = async data => {
+  try {
+    const response = await createUserWithEmailAndPassword(
+      auth,
+      data.email,
+      data.password
+    )
+    if (response) {
+      await updateProfile(response.user, {
+        displayName: data.displayName,
+        photoURL: data.photoURL
+      })
+    }
+  } catch (error) {
+    console.error('Error al registrar usuario: ', error)
+  }
+}
+
+export const emailLogin = async data => {
+  try {
+    const { user } = await signInWithEmailAndPassword(
+      auth,
+      data.email,
+      data.password
+    )
+    return {
+      accessToken: user.accessToken,
+      displayName: user.displayName,
+      email: user.email,
+      photoURL: user.photoURL,
+      uid: user.uid
+    }
+  } catch (error) {
+    console.error('Error al iniciar sesión: ', error)
+  }
+}
+
+export const firebaseLogout = async () => {
+  try {
+    await signOut(auth)
+  } catch (error) {
+    console.error('Error al cerrar sesión: ', error)
   }
 }

@@ -39,7 +39,7 @@ const AppRouter = () => {
           <Suspense fallback={<CircularProgress />}>
             <Routes>
               {/* Rutas Públicas */}
-              <Route path='/' element={<Home />} />
+              <Route path='/' element={<Home setAutenticado={setAutenticado} />} />
               <Route path='/signup' element={<SignUp />} />
               <Route
                 path='/login'

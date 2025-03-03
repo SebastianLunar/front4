@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom'
 import { MuiFileInput } from 'mui-file-input'
 import { getImageURL } from '../helpers/mediaUpload'
 import useForm from '../hooks/useForm'
+import { emailRegister } from '../redux/slices/currentUser'
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false)
@@ -57,11 +58,24 @@ const SignUp = () => {
       password: formValues.password
     }
 
-    if (formValues.nombre !== '' && formValues.email !== '' && formValues.password !== '') {
+    if (
+      formValues.nombre !== '' &&
+      formValues.email !== '' &&
+      formValues.password !== ''
+    ) {
       const result = await postData(
         'https://apideployer.onrender.com/usuarios',
         newUser
       )
+
+      //Registro con Firebase Auth
+      const response = await emailRegister({
+        email: formValues.email,
+        password: formValues.password,
+        displayName: formValues.nombre,
+        photoURL: await getImageURL(file)
+      })
+
       if (result === 201) {
         alert('Usuario creado exitosamente')
         navigate('/login')
@@ -97,7 +111,9 @@ const SignUp = () => {
             error={isSending && formValues.nombre === ''}
             value={formValues.nombre}
             onChange={handleInputChange}
-            helperText={isSending && formValues.nombre === '' && 'Debe llenar este campo'}
+            helperText={
+              isSending && formValues.nombre === '' && 'Debe llenar este campo'
+            }
           />
         </FormControl>
         <FormControl sx={{ m: 1, width: '25ch' }} variant='filled'>

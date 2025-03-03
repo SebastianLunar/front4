@@ -24,13 +24,15 @@ import Button from '@mui/material/Button'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { Avatar, Menu, MenuItem, Tooltip } from '@mui/material'
 import { AppContext } from '../context/userContext'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { firebaseLogout, saveUser } from '../redux/slices/currentUser'
 
 const drawerWidth = 240
 
 const NavBar = ({ autenticado, setAutenticado }) => {
   const { context, setContext } = useContext(AppContext)
   const currentUser = useSelector(store => store.currentUser)
+  const dispatch = useDispatch()
   const navigate = useNavigate()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [anchorElUser, setAnchorElUser] = useState(null)
@@ -89,12 +91,23 @@ const NavBar = ({ autenticado, setAutenticado }) => {
     navigate('/profile')
   }
 
-  const logOut = () => {
+  const logOut = async () => {
     handleCloseUserMenu()
+    await firebaseLogout().then(() => {
+      dispatch(
+        saveUser({
+          accessToken: '',
+          displayName: '',
+          email: '',
+          photoURL: '',
+          uid: ''
+        })
+      )
+    })
     setContext({})
     localStorage.removeItem('user')
     setAutenticado(false)
-  } 
+  }
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
@@ -156,7 +169,10 @@ const NavBar = ({ autenticado, setAutenticado }) => {
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title='Abrir Configuración'>
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt='Imagen del Usuario' src={context.profilePhoto || currentUser.photoURL} />
+                  <Avatar
+                    alt='Imagen del Usuario'
+                    src={context.profilePhoto || currentUser.photoURL}
+                  />
                 </IconButton>
               </Tooltip>
               <Menu

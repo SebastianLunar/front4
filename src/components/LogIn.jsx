@@ -22,6 +22,7 @@ import FacebookIcon from '@mui/icons-material/Facebook'
 import { useDispatch, useSelector } from 'react-redux'
 import UserCard from './UserCard'
 import {
+  emailLogin,
   facebookLogin,
   googleLogin,
   saveUser
@@ -31,6 +32,10 @@ const LogIn = ({ setAutenticado }) => {
   const dispatch = useDispatch()
   const { registeredUsers } = useSelector(store => store.users)
   const [selectedUser, setSelectedUser] = useState(null)
+  const [showPassword, setShowPassword] = useState(false)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const navigate = useNavigate()
 
   const handleGoogleLogin = async () => {
     await googleLogin().then(response => {
@@ -41,9 +46,27 @@ const LogIn = ({ setAutenticado }) => {
 
   const handleFacebookLogin = async () => {
     await facebookLogin().then(response => {
-      console.log(response)
       dispatch(saveUser(response))
       setAutenticado(true)
+    })
+  }
+
+  const handleClickShowPassword = () => setShowPassword(show => !show)
+
+  const handleMouseDownPassword = event => {
+    event.preventDefault()
+  }
+  const handleMouseUpPassword = event => {
+    event.preventDefault()
+  }
+
+  const handleSubmit = async event => {
+    event.preventDefault()
+
+    await emailLogin({ email, password }).then(response => {
+      dispatch(saveUser(response))
+      setAutenticado(true)
+      navigate('/characters')
     })
   }
 
@@ -123,7 +146,7 @@ const LogIn = ({ setAutenticado }) => {
           <ErrorMessage name='password' />
           <Button type='submit'>Iniciar Sesión</Button>
         </Form>
-      </Formik>
+      </Formik> */}
 
       <form
         style={{ display: 'flex', flexDirection: 'column' }}
@@ -168,7 +191,7 @@ const LogIn = ({ setAutenticado }) => {
         <Button type='submit' variant='contained'>
           Ingresar
         </Button>
-      </form> */}
+      </form>
     </Container>
   )
 }
