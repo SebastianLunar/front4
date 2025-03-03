@@ -85,7 +85,7 @@ export default function MoviesCard ({ movie }) {
         component='img'
         height='194'
         image={`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`}
-        alt='Paella dish'
+        alt='Movie Poster'
       />
       <CardContent>
         <Typography variant='body2' sx={{ color: 'text.secondary' }}>
